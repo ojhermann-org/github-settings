@@ -1,5 +1,6 @@
 # Local .terraform directories
-**/.terraform/*
+.terraform/
+**/.terraform/**
 
 # Terraform state files
 *.tfstate
@@ -29,3 +30,6 @@ terraform.rc
 
 # direnv — contains secrets, never commit
 .envrc
+
+# OpenTofu generated config — review and move to permanent files before committing
+generated_*.tf
