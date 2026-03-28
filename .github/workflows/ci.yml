@@ -27,6 +27,7 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: "1"
           hide-progress: true
+          trivyignores: .trivyignore
 
   plan:
     needs: [fmt, trivy]
