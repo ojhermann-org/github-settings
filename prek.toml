@@ -1,0 +1,17 @@
+[[repos]]
+repo = "builtin"
+hooks = [
+  {id = "no-commit-to-branch"},
+  {id = "trailing-whitespace"},
+  {id = "end-of-file-fixer"},
+  {id = "check-merge-conflict"},
+  {id = "check-toml"},
+  {id = "detect-private-key"},
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  {id = "tofu-fmt",      name = "tofu fmt",      entry = "tofu fmt",      language = "system", files = "\\.tf$", pass_filenames = false},
+  {id = "tofu-validate", name = "tofu validate",  entry = "tofu validate", language = "system", pass_filenames = false},
+]
