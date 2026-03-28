@@ -25,37 +25,39 @@ The GitHub token needs scopes: `repo`, `admin:org`, `delete_repo`, `workflow`.
 | File | Purpose |
 |------|---------|
 | `versions.tf` | Required providers, versions, R2 backend config |
-| `provider.tf` | GitHub provider (reads `GITHUB_TOKEN` from env) |
-| `variables.tf` | Input variables (`github_owner = "ojhermann"`) |
-| `imports.tf` | OpenTofu `import` blocks for onboarding existing repos |
-| `repositories.tf` | `github_repository` resources and associated branch protection / Actions config |
+| `provider.tf` | GitHub provider (owner hardcoded as `ojhermann-org`, token from `GITHUB_TOKEN`) |
+| `imports.tf` | OpenTofu `import` blocks for onboarding existing resources (must be present during `tofu apply`) |
+| `organization.tf` | Org-level settings: `github_organization_settings` and `github_organization_ruleset` |
+| `repositories.tf` | One `module` call per repo — `name` and optional `description` only |
+| `modules/standard_repo/` | All repo defaults: `github_repository` + CODEOWNERS file, owner hardcoded as `ojhermann-org` |
+
+## Branch Protection Strategy
+
+Branch protection is handled at the org level via `github_organization_ruleset.default_branch` in `organization.tf`. It targets `~DEFAULT_BRANCH` across `~ALL` repos, so new repos are automatically covered. There are no per-repo `github_branch_protection` resources.
+
+## Repo Conventions
+
+- One `module "<slug>"` call per repo in `repositories.tf`, using `./modules/standard_repo`. Pass `name` and `description` (omit `description` if empty).
+- All standard settings (security scanning, CODEOWNERS, merge strategy, etc.) are defined once in `modules/standard_repo/main.tf`.
+- To deviate from the standard for a specific repo, add a variable to the `standard_repo` module and pass an override in `repositories.tf` with a comment explaining why.
+- Do not use `terraform.tfvars` for sensitive values — use environment variables only.
+- Commit `.terraform.lock.hcl` so provider versions are pinned across machines.
+- Run `tofu fmt` before committing.
 
 ## Import Workflow
 
-When onboarding an existing GitHub repo:
+When onboarding an existing GitHub resource:
 
 1. Add an `import` block to `imports.tf`:
    ```hcl
    import {
-     to = github_repository.my_repo
+     to = module.my_repo.github_repository.repo
      id = "repo-name-on-github"
    }
    ```
-2. Generate resource config from live state:
-   ```bash
-   tofu plan -generate-config-out=generated_repositories.tf
-   ```
-3. Review `generated_repositories.tf`, clean up any unwanted attributes, move resource blocks into `repositories.tf`.
-4. Run `tofu apply` to record state.
-5. Delete `generated_repositories.tf` and remove the corresponding `import` block from `imports.tf`.
-
-## Conventions
-
-- One `github_repository` resource per repo, named with underscores matching the repo slug (e.g. `home-manager` → `github_repository.home_manager`).
-- Keep branch protection rules and Actions settings as separate resource blocks directly below their parent `github_repository` resource in `repositories.tf`.
-- Do not use `terraform.tfvars` for sensitive values — use environment variables only.
-- Commit `.terraform.lock.hcl` so provider versions are pinned across machines.
-- Run `tofu fmt` before committing.
+2. Add a matching `module` call to `repositories.tf`.
+3. Run `tofu plan` to verify, then `tofu apply`.
+4. Remove the import block from `imports.tf`.
 
 ## Common Commands
 

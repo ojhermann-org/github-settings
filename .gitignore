@@ -33,3 +33,6 @@ terraform.rc
 
 # OpenTofu generated config — review and move to permanent files before committing
 generated_*.tf
+
+# OpenTofu state lock file (transient, created during operations)
+*.tfstate.lock.info
