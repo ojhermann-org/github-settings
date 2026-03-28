@@ -12,6 +12,8 @@ module "configuration_apple_os" {
 module "home_manager" {
   source = "./modules/standard_repo"
   name   = "home-manager"
+
+  required_status_checks = ["lint", "build"] # require CI to pass before merging
 }
 
 module "github_settings" {

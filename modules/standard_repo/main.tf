@@ -39,6 +39,33 @@ resource "github_repository" "repo" {
   }
 }
 
+resource "github_repository_ruleset" "ci_checks" {
+  count = length(var.required_status_checks) > 0 ? 1 : 0
+
+  name        = "ci-checks"
+  repository  = github_repository.repo.name
+  target      = "branch"
+  enforcement = "active"
+
+  conditions {
+    ref_name {
+      include = ["~DEFAULT_BRANCH"]
+      exclude = []
+    }
+  }
+
+  rules {
+    required_status_checks {
+      dynamic "required_check" {
+        for_each = var.required_status_checks
+        content {
+          context = required_check.value
+        }
+      }
+    }
+  }
+}
+
 resource "github_repository_file" "codeowners" {
   count = var.create_codeowners ? 1 : 0
 
