@@ -13,3 +13,11 @@ module "home_manager" {
   source = "./modules/standard_repo"
   name   = "home-manager"
 }
+
+module "github_settings" {
+  source      = "./modules/standard_repo"
+  name        = "github-settings"
+  description = "ojhermann's GitHub account settings managed as IaC"
+
+  create_codeowners = false # CODEOWNERS is committed directly in the repo via PR
+}

@@ -40,6 +40,8 @@ resource "github_repository" "repo" {
 }
 
 resource "github_repository_file" "codeowners" {
+  count = var.create_codeowners ? 1 : 0
+
   repository          = github_repository.repo.name
   branch              = "main"
   file                = "CODEOWNERS"

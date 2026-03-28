@@ -14,3 +14,9 @@ variable "homepage_url" {
   type        = string
   default     = ""
 }
+
+variable "create_codeowners" {
+  description = "Whether to manage the CODEOWNERS file via tofu. Set to false for repos where the file is committed directly (e.g. the IaC repo itself, which requires a PR to push to main)."
+  type        = bool
+  default     = true
+}
