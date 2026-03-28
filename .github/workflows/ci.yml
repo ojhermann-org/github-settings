@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: latest
+      - name: Check formatting
+        run: tofu fmt -check -recursive
+
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for misconfigurations
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          hide-progress: true
+
+  plan:
+    needs: [fmt, trivy]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: latest
+      - name: init
+        run: tofu init
+      - name: validate
+        run: tofu validate
+      - name: plan
+        run: tofu plan -input=false -lock=false
