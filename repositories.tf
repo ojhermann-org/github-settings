@@ -16,6 +16,14 @@ module "home_manager" {
   required_status_checks = ["lint", "build"] # require CI to pass before merging
 }
 
+module "aws_infra" {
+  source      = "./modules/standard_repo"
+  name        = "aws-infra"
+  description = "Managing AWS infrastructure with OpenTofu, following AWS Organizations best practices"
+
+  required_status_checks = ["fmt", "trivy"] # require CI to pass before merging
+}
+
 module "github_settings" {
   source      = "./modules/standard_repo"
   name        = "github-settings"
