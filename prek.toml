@@ -12,7 +12,8 @@ hooks = [
 [[repos]]
 repo = "local"
 hooks = [
-  {id = "tofu-fmt",      name = "tofu fmt",      entry = "tofu fmt",      language = "system", files = "\\.tf$", pass_filenames = false},
-  {id = "tofu-validate", name = "tofu validate",  entry = "tofu validate", language = "system", pass_filenames = false},
-  {id = "tflint",        name = "tflint",         entry = "tflint --recursive", language = "system", pass_filenames = false},
+  {id = "tofu-fmt",      name = "tofu fmt",                     entry = "tofu fmt",               language = "system", files = "\\.tf$", pass_filenames = false},
+  {id = "tofu-init",    name = "tofu init (update lock file)", entry = "tofu init -backend=false", language = "system", files = "\\.tf$", pass_filenames = false},
+  {id = "tofu-validate", name = "tofu validate",               entry = "tofu validate",            language = "system", pass_filenames = false},
+  {id = "tflint",        name = "tflint",                      entry = "tflint --recursive",       language = "system", pass_filenames = false},
 ]
