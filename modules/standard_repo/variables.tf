@@ -15,6 +15,12 @@ variable "homepage_url" {
   default     = ""
 }
 
+variable "required_status_checks" {
+  description = "List of CI check names that must pass before merging to the default branch. Empty list disables this ruleset."
+  type        = list(string)
+  default     = []
+}
+
 variable "create_codeowners" {
   description = "Whether to manage the CODEOWNERS file via tofu. Set to false for repos where the file is committed directly (e.g. the IaC repo itself, which requires a PR to push to main)."
   type        = bool
