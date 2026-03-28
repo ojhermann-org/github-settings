@@ -9,8 +9,3 @@ import {
   to = module.github_settings.github_repository.repo
   id = "github-settings"
 }
-
-import {
-  to = module.aws_infra.github_repository.repo
-  id = "aws-infra"
-}
