@@ -1,0 +1,24 @@
+name: Apply
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: latest
+      - name: init
+        run: tofu init
+      - name: plan
+        run: tofu plan -input=false -out=tfplan
+      - name: apply
+        run: tofu apply -input=false tfplan
