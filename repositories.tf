@@ -30,5 +30,6 @@ module "github_settings" {
   name        = "github-settings"
   description = "ojhermann's GitHub account settings managed as IaC"
 
-  create_codeowners = false # CODEOWNERS is committed directly in the repo via PR
+  create_codeowners      = false                    # CODEOWNERS is committed directly in the repo via PR
+  required_status_checks = ["fmt", "trivy", "plan"] # require CI to pass before merging
 }
