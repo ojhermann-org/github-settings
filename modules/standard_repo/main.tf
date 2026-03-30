@@ -39,6 +39,27 @@ resource "github_repository" "repo" {
   }
 }
 
+resource "github_repository_ruleset" "branch_naming" {
+  name        = "branch-naming"
+  repository  = github_repository.repo.name
+  target      = "branch"
+  enforcement = "active"
+
+  conditions {
+    ref_name {
+      include = ["~ALL"]
+      exclude = ["~DEFAULT_BRANCH"]
+    }
+  }
+
+  rules {
+    branch_name_pattern {
+      operator = "regex"
+      pattern  = "^(feat|fix|chore|docs|refactor)/.*"
+    }
+  }
+}
+
 resource "github_repository_ruleset" "ci_checks" {
   count = length(var.required_status_checks) > 0 ? 1 : 0
 
