@@ -21,8 +21,8 @@ module "aws_infra" {
   name        = "aws-infra"
   description = "Managing AWS infrastructure with OpenTofu, following AWS Organizations best practices"
 
-  required_status_checks = ["fmt", "trivy"] # require CI to pass before merging
-  create_codeowners      = false            # CODEOWNERS is committed directly in the repo via PR
+  required_status_checks = ["fmt", "trivy", "plan (management)", "plan (dev)", "plan (stage)", "plan (prod)"] # require CI to pass before merging
+  create_codeowners      = false                                                                              # CODEOWNERS is committed directly in the repo via PR
 }
 
 module "github_settings" {
