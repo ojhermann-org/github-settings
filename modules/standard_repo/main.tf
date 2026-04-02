@@ -6,7 +6,7 @@ resource "github_repository" "repo" {
   visibility             = "public"
   archive_on_destroy     = false
   archived               = false
-  auto_init              = false
+  auto_init              = true
   allow_auto_merge       = true
   allow_forking          = true
   allow_merge_commit     = false # org ruleset only permits squash and rebase
