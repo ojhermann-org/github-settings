@@ -33,3 +33,12 @@ module "github_settings" {
   create_codeowners      = false                    # CODEOWNERS is committed directly in the repo via PR
   required_status_checks = ["fmt", "trivy", "plan"] # require CI to pass before merging
 }
+
+module "personal_website" {
+  source            = "./modules/standard_repo"
+  name              = "personal-website"
+  description       = "Otto Hermann's personal website, built with Astro and deployed to Cloudflare Pages."
+  homepage_url      = "https://otto-hermann.me"
+  create_codeowners = true
+  # required_status_checks intentionally omitted — CI job name confirmed in PR 3, added in PR 4
+}
