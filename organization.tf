@@ -37,6 +37,12 @@ resource "github_organization_ruleset" "default_branch" {
     }
   }
 
+  bypass_actors {
+    actor_id    = 1
+    actor_type  = "OrganizationAdmin"
+    bypass_mode = "always"
+  }
+
   rules {
     deletion                = true
     required_linear_history = true
