@@ -38,6 +38,8 @@ The GitHub token needs scopes: `repo`, `admin:org`, `delete_repo`, `workflow`.
 
 Branch protection is handled at the org level via `github_organization_ruleset.default_branch` in `organization.tf`. It targets `~DEFAULT_BRANCH` across `~ALL` repos, so new repos are automatically covered. There are no per-repo `github_branch_protection` resources.
 
+The ruleset includes a `bypass_actors` block granting `OrganizationAdmin` (`actor_id = 1`) unconditional bypass. This is required so the admin PAT used in the apply workflow can push files (e.g. CODEOWNERS) directly to `main` when creating new repos — without it, the PR requirement blocks `github_repository_file` resource creation with a 409.
+
 ## Repo Conventions
 
 - One `module "<slug>"` call per repo in `repositories.tf`, using `./modules/standard_repo`. Pass `name` and `description` (omit `description` if empty).
