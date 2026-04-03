@@ -8,8 +8,8 @@ resource "github_repository" "repo" {
   archived               = false
   auto_init              = true
   allow_auto_merge       = true
-  allow_forking          = true
-  allow_merge_commit     = false # org ruleset only permits squash and rebase
+  allow_forking          = var.visibility == "public" # org policy disallows forking of private repos
+  allow_merge_commit     = false                      # org ruleset only permits squash and rebase
   allow_rebase_merge     = true
   allow_squash_merge     = true
   allow_update_branch    = false
