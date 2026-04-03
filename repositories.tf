@@ -34,6 +34,13 @@ module "github_settings" {
   required_status_checks = ["fmt", "trivy", "plan"] # require CI to pass before merging
 }
 
+module "curriculum_vitae" {
+  source      = "./modules/standard_repo"
+  name        = "curriculum-vitae"
+  description = "Otto Hermann's CV, written in LaTeX"
+  visibility  = "private" # personal document, not for public consumption
+}
+
 module "personal_website" {
   source                 = "./modules/standard_repo"
   name                   = "personal-website"

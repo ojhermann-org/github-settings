@@ -3,7 +3,7 @@ resource "github_repository" "repo" {
   description  = var.description
   homepage_url = var.homepage_url
 
-  visibility             = "public"
+  visibility             = var.visibility
   archive_on_destroy     = false
   archived               = false
   auto_init              = true
@@ -29,12 +29,15 @@ resource "github_repository" "repo" {
   vulnerability_alerts        = true
   web_commit_signoff_required = false
 
-  security_and_analysis {
-    secret_scanning {
-      status = "enabled"
-    }
-    secret_scanning_push_protection {
-      status = "enabled"
+  dynamic "security_and_analysis" {
+    for_each = var.visibility == "public" ? [1] : []
+    content {
+      secret_scanning {
+        status = "enabled"
+      }
+      secret_scanning_push_protection {
+        status = "enabled"
+      }
     }
   }
 }
