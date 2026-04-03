@@ -26,3 +26,14 @@ variable "create_codeowners" {
   type        = bool
   default     = true
 }
+
+variable "visibility" {
+  description = "Repository visibility: 'public' or 'private'."
+  type        = string
+  default     = "public"
+
+  validation {
+    condition     = contains(["public", "private"], var.visibility)
+    error_message = "visibility must be 'public' or 'private'."
+  }
+}
