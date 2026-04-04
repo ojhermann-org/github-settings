@@ -49,3 +49,10 @@ module "personal_website" {
   create_codeowners      = true
   required_status_checks = ["ci"]
 }
+
+module "notes" {
+  source      = "./modules/standard_repo"
+  name        = "notes"
+  description = "Notes I'd like to have accessible across devices"
+  visibility  = "private"
+}
