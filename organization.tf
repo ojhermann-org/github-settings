@@ -56,5 +56,13 @@ resource "github_organization_ruleset" "default_branch" {
       dismiss_stale_reviews_on_push     = false
       require_last_push_approval        = false
     }
+
+    required_status_checks {
+      strict_required_status_checks_policy = false
+
+      required_check {
+        context = "ci"
+      }
+    }
   }
 }

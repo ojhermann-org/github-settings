@@ -12,26 +12,18 @@ module "configuration_apple_os" {
 module "home_manager" {
   source = "./modules/standard_repo"
   name   = "home-manager"
-
-  required_status_checks = ["lint", "build"] # require CI to pass before merging
 }
 
 module "aws_infra" {
   source      = "./modules/standard_repo"
   name        = "aws-infra"
   description = "Managing AWS infrastructure with OpenTofu, following AWS Organizations best practices"
-
-  required_status_checks = ["fmt", "trivy", "plan (management)", "plan (dev)", "plan (stage)", "plan (prod)"] # require CI to pass before merging
-  create_codeowners      = false                                                                              # CODEOWNERS is committed directly in the repo via PR
 }
 
 module "github_settings" {
   source      = "./modules/standard_repo"
   name        = "github-settings"
   description = "ojhermann's GitHub account settings managed as IaC"
-
-  create_codeowners      = false                    # CODEOWNERS is committed directly in the repo via PR
-  required_status_checks = ["fmt", "trivy", "plan"] # require CI to pass before merging
 }
 
 module "curriculum_vitae" {
@@ -42,12 +34,10 @@ module "curriculum_vitae" {
 }
 
 module "personal_website" {
-  source                 = "./modules/standard_repo"
-  name                   = "personal-website"
-  description            = "Otto Hermann's personal website, built with Astro and deployed to Cloudflare Pages."
-  homepage_url           = "https://otto-hermann.me"
-  create_codeowners      = true
-  required_status_checks = ["ci"]
+  source       = "./modules/standard_repo"
+  name         = "personal-website"
+  description  = "Otto Hermann's personal website, built with Astro and deployed to Cloudflare Pages."
+  homepage_url = "https://otto-hermann.me"
 }
 
 module "notes" {
