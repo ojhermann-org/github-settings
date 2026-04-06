@@ -65,10 +65,34 @@ tofu plan   # preview changes
 tofu apply  # apply changes
 ```
 
+## CI Strategy
+
+CI is enforced at the org level: `github_organization_ruleset.default_branch` in `organization.tf` requires a check named `ci` to pass before any PR can merge to the default branch across all repos.
+
+Each repo is responsible for defining what CI does — github-settings only cares that a job named `ci` passes. The convention every repo follows is:
+
+1. Define whatever jobs make sense (linting, formatting, tests, plan, etc.)
+2. Add a `ci` gate job that `needs` all of them, with `if: always()` so it fails rather than skips when an upstream job fails
+
+This separates concerns cleanly: github-settings owns *that* CI must pass; each repo owns *what* CI does. Adding, removing, or renaming jobs in a repo never requires a change here.
+
+> **Note:** This is a convention, not a technical enforcement. Nothing prevents a repo from having a `ci` job that depends on nothing. For a personal org this is a non-issue, but worth keeping in mind if the org grows.
+
+### Example: this repo
+
+```mermaid
+graph LR
+  fmt --> plan
+  trivy --> plan
+  plan --> ci
+```
+
+`fmt` and `trivy` run in parallel, then `plan` runs once both pass, then `ci` acts as the gate. The org ruleset sees `ci` pass or fail.
+
 ## Managed Resources
 
 | Resource | File |
 |----------|------|
+| Org settings | `organization.tf` |
+| Branch protection / CI enforcement | `organization.tf` |
 | Repositories | `repositories.tf` |
-| Branch protection | `repositories.tf` (alongside repo resources) |
-| Actions settings | `repositories.tf` |

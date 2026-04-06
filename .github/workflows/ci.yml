@@ -49,7 +49,7 @@ jobs:
         run: tofu plan -input=false -lock=false
 
   ci:
-    needs: [fmt, trivy, plan]
+    needs: [plan]
     runs-on: ubuntu-latest
     if: always()
     steps:
