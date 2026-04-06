@@ -29,9 +29,9 @@ The GitHub token needs scopes: `repo`, `admin:org`, `delete_repo`, `workflow`.
 | `imports.tf` | OpenTofu `import` blocks for onboarding existing resources (must be present during `tofu apply`) |
 | `organization.tf` | Org-level settings: `github_organization_settings` and `github_organization_ruleset` |
 | `repositories.tf` | One `module` call per repo — `name` and optional `description` only |
-| `modules/standard_repo/` | All repo defaults: `github_repository` + CODEOWNERS file, owner hardcoded as `ojhermann-org` |
+| `modules/standard_repo/` | All repo defaults: `github_repository`, CODEOWNERS file, and branch-naming ruleset. Owner hardcoded as `ojhermann-org` |
 | `.trivyignore` | Trivy findings suppressed with justification (e.g. GIT-0001 — repos are intentionally public) |
-| `.github/workflows/ci.yml` | PR checks: `fmt`, `trivy`, `plan` (requires `GH_TOKEN`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` secrets) |
+| `.github/workflows/ci.yml` | PR checks: `fmt`, `trivy`, `plan`, and a `ci` gate job (requires `GH_TOKEN`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` secrets) |
 | `.github/workflows/apply.yml` | Manual `workflow_dispatch` apply — main branch only, same secrets as CI |
 
 ## Branch Protection Strategy
@@ -45,7 +45,7 @@ The ruleset includes a `bypass_actors` block granting `OrganizationAdmin` (`acto
 - One `module "<slug>"` call per repo in `repositories.tf`, using `./modules/standard_repo`. Pass `name` and `description` (omit `description` if empty).
 - All standard settings (security scanning, CODEOWNERS, merge strategy, etc.) are defined once in `modules/standard_repo/main.tf`.
 - To deviate from the standard for a specific repo, add a variable to the `standard_repo` module and pass an override in `repositories.tf` with a comment explaining why.
-- Use `required_status_checks = ["job1", "job2"]` to require CI checks before merging (matches job names in the repo's CI workflow). If the repo has a ci-checks ruleset blocking direct file pushes, also set `create_codeowners = false` and commit CODEOWNERS via a PR in that repo instead.
+- CI is gated at the org level by `github_organization_ruleset.default_branch` in `organization.tf`, which requires a check named `ci` to pass on all repos before merging to the default branch. Each repo's CI workflow must include a `ci` summary job (using `needs` and `if: always()`) that passes only when all real work jobs pass. The `standard_repo` module does not manage per-repo CI check rulesets.
 - Do not use `terraform.tfvars` for sensitive values — use environment variables only.
 - Commit `.terraform.lock.hcl` so provider versions are pinned across machines. The `tofu-init` pre-commit hook keeps it in sync automatically.
 - Run `tofu fmt` before committing.

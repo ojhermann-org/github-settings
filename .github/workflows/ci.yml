@@ -47,3 +47,14 @@ jobs:
         run: tofu validate
       - name: plan
         run: tofu plan -input=false -lock=false
+
+  ci:
+    needs: [plan]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            exit 1
+          fi
