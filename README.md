@@ -89,6 +89,31 @@ graph LR
 
 `fmt` and `trivy` run in parallel, then `plan` runs once both pass, then `ci` acts as the gate. The org ruleset sees `ci` pass or fail.
 
+## Creating a New Repository
+
+1. Add a `module` block to `repositories.tf`:
+
+   ```hcl
+   module "my_repo" {
+     source      = "./modules/standard_repo"
+     name        = "my-repo"
+     description = "What this repo is for"
+     visibility  = "private" # or "public"
+   }
+   ```
+
+2. Verify locally:
+
+   ```bash
+   tofu fmt && tofu validate && tofu plan
+   ```
+
+3. Commit on a branch, open a PR, and merge it.
+
+4. Trigger `tofu apply` via the [Actions UI](../../actions/workflows/apply.yml) (manual `workflow_dispatch` on `main`).
+
+5. Add a CI workflow to the new repo itself. The org-level ruleset requires a job named `ci` to pass on every PR before it can merge — the workflow lives in the new repo, not here.
+
 ## Managed Resources
 
 | Resource | File |
