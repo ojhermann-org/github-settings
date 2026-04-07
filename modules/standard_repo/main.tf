@@ -68,7 +68,7 @@ resource "github_repository_file" "codeowners" {
   repository          = github_repository.repo.name
   branch              = "main"
   file                = "CODEOWNERS"
-  content             = "* @ojhermann-org\n"
+  content             = "* @ojhermann\n"
   commit_message      = "Add CODEOWNERS"
   overwrite_on_create = true
 
