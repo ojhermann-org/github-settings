@@ -46,3 +46,10 @@ module "notes" {
   description = "Notes I'd like to have accessible across devices"
   visibility  = "private"
 }
+
+module "fred" {
+  source      = "./modules/standard_repo"
+  name        = "fred"
+  description = "A library for wokring with https://fred.stlouisfed.org/docs/api/fred/"
+  visibility  = "public"
+}
