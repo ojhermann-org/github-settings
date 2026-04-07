@@ -9,8 +9,3 @@ import {
   to = module.github_settings.github_repository.repo
   id = "github-settings"
 }
-
-import {
-  to = module.effective_haskell.github_repository.repo
-  id = "effective-haskell"
-}
