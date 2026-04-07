@@ -46,3 +46,10 @@ module "notes" {
   description = "Notes I'd like to have accessible across devices"
   visibility  = "private"
 }
+
+module "magical_haskell" {
+  source      = "./modules/standard_repo"
+  name        = "magical-haskell"
+  description = "Using Magical Haskell: A Friendly Approach to Modern Functional Programming, Type Theory, and Artificial Intelligence to get back into Haskell"
+  visibility  = "public"
+}
