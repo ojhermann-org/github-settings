@@ -46,10 +46,3 @@ module "notes" {
   description = "Notes I'd like to have accessible across devices"
   visibility  = "private"
 }
-
-module "effective_haskell" {
-  source      = "./modules/standard_repo"
-  name        = "effective-haskell"
-  description = "Getting back into Haskell"
-  visibility  = "private"
-}
