@@ -20,6 +20,12 @@ resource "github_organization_settings" "settings" {
   secret_scanning_push_protection_enabled_for_new_repositories = true
 }
 
+resource "github_actions_organization_workflow_permissions" "settings" {
+  organization_slug                = "ojhermann-org"
+  default_workflow_permissions     = "read"
+  can_approve_pull_request_reviews = true
+}
+
 resource "github_organization_ruleset" "default_branch" {
   name        = "default-branch"
   target      = "branch"
