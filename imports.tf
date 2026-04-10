@@ -4,8 +4,3 @@
 #   2. Add matching module/resource to repositories.tf or organization.tf
 #   3. Run tofu plan to verify, then tofu apply (import block must still be present)
 #   4. Remove import blocks after successful apply
-
-import {
-  to = module.github_settings.github_repository.repo
-  id = "github-settings"
-}
