@@ -28,6 +28,8 @@ resource "github_repository" "repo" {
   vulnerability_alerts        = true
   web_commit_signoff_required = false
 
+  license_template = var.license_template
+
   dynamic "security_and_analysis" {
     for_each = var.visibility == "public" ? [1] : []
     content {
@@ -38,6 +40,10 @@ resource "github_repository" "repo" {
         status = "enabled"
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [license_template]
   }
 }
 
