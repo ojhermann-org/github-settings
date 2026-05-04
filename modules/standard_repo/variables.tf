@@ -37,3 +37,9 @@ variable "license_template" {
   type        = string
   default     = "apache-2.0"
 }
+
+variable "topics" {
+  description = "GitHub topics to attach to the repository, used for discoverability."
+  type        = list(string)
+  default     = []
+}
