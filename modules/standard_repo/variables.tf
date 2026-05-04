@@ -31,3 +31,9 @@ variable "visibility" {
     error_message = "visibility must be 'public' or 'private'."
   }
 }
+
+variable "license_template" {
+  description = "GitHub license template keyword used when the repository is created (e.g. 'apache-2.0', 'mit'). Only applied on initial creation; ignored on subsequent runs so existing repos do not drift."
+  type        = string
+  default     = "apache-2.0"
+}
