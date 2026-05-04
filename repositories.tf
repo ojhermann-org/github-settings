@@ -1,8 +1,3 @@
-module "flake_uv_template" {
-  source = "./modules/standard_repo"
-  name   = "flake-uv-template"
-}
-
 module "configuration_apple_os" {
   source      = "./modules/standard_repo"
   name        = "configuration_apple_os"
