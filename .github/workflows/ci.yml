@@ -36,6 +36,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_bot_app_id: ${{ secrets.BOT_APP_ID }}
+      TF_VAR_bot_app_private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v6
       - uses: opentofu/setup-opentofu@v2
